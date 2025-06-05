@@ -1,65 +1,597 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RiskCopilot EA</title>
-  <link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiskCopilot EA - Your Intelligent Trading Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #0d1421 100%);
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(64, 224, 208, 0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-100px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(64, 224, 208, 0.2);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #40E0D0;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #40E0D0;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            padding: 0 2rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #40E0D0, #00CED1, #48D1CC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #40E0D0;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #b0b0b0;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #40E0D0, #00CED1);
+            color: #0f0f23;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(64, 224, 208, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(64, 224, 208, 0.1);
+            color: #40E0D0;
+            border: 2px solid #40E0D0;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(64, 224, 208, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #40E0D0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(26, 26, 58, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(64, 224, 208, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #40E0D0, #00CED1, #48D1CC);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #40E0D0;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #40E0D0, #00CED1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .feature-card p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+
+        /* Modes Section */
+        .modes {
+            padding: 6rem 2rem;
+            background: rgba(13, 20, 33, 0.5);
+            position: relative;
+        }
+
+        .modes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .modes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .mode-card {
+            background: linear-gradient(135deg, rgba(64, 224, 208, 0.1), rgba(0, 206, 209, 0.05));
+            border: 2px solid rgba(64, 224, 208, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .mode-card:hover {
+            transform: scale(1.05);
+            border-color: #40E0D0;
+            box-shadow: 0 20px 40px rgba(64, 224, 208, 0.2);
+        }
+
+        .mode-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #40E0D0;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-subtitle {
+            color: #48D1CC;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .stats-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+            background: rgba(26, 26, 58, 0.4);
+            border-radius: 15px;
+            border: 1px solid rgba(64, 224, 208, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #40E0D0;
+            display: block;
+        }
+
+        .stat-label {
+            color: #b0b0b0;
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 15, 35, 0.9);
+            padding: 3rem 2rem 1rem;
+            border-top: 1px solid rgba(64, 224, 208, 0.2);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #40E0D0;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>RiskCopilot EA</h1>
-    <p class="subtitle">Your Intelligent Trading Assistant</p>
-    <p class="tagline">"See Your Risk. Master Your Trade."</p>
-  </header>
+    <!-- Animated Background -->
+    <div class="particles" id="particles"></div>
 
-  <main>
-    <section class="intro">
-      <p>
-        RiskCopilot EA is your professional trading companion designed to enhance position sizing accuracy and risk management without taking control of your trading decisions.
-      </p>
-      <p>
-        This sophisticated visual assistant provides real-time calculations, intuitive risk assessment tools, and comprehensive trade analytics to help traders at any level optimize their market performance.
-      </p>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo">RiskCopilot EA</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#modes">Modes</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>RiskCopilot EA</h1>
+            <div class="hero-subtitle">"See Your Risk. Master Your Trade."</div>
+            <p>Your intelligent trading assistant designed to enhance position sizing accuracy and risk management without taking control of your trading decisions.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn-primary">Download Now</a>
+                <a href="#" class="btn-secondary">Watch Demo</a>
+            </div>
+        </div>
     </section>
 
-    <section class="features">
-      <h2>Core Features</h2>
-      <ul>
-        <li><strong>Intelligent Position Sizing & Risk Calculation</strong></li>
-        <li>Real-time risk/reward ratio analysis</li>
-        <li>Interactive SL/TP adjustment with drag-and-drop</li>
-        <li>Smart Spread Monitoring System</li>
-        <li>Three Dynamic Operating Modes</li>
-        <li>Modern Visual Interface with Themes</li>
-        <li>Advanced Trading Tools</li>
-        <li>Multi-Currency & Multi-Asset Support</li>
-      </ul>
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <h2 class="section-title">Core Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Intelligent Position Sizing</h3>
+                <p>Automatic position size calculation based on customizable risk percentage and account balance with multi-currency support for all major broker deposit currencies.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Smart Spread Monitoring</h3>
+                <p>Intelligent spread filtering with instrument-specific limits based on real market statistics and adaptive thresholds for different asset classes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Visual Risk Assessment</h3>
+                <p>Real-time risk/reward ratio analysis with visual feedback, interactive stop-loss and take-profit adjustment with drag-and-drop functionality.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Multi-Asset Support</h3>
+                <p>Universal instrument compatibility including Forex pairs, precious metals, energy commodities, stock indices, and popular cryptocurrencies.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Professional Interface</h3>
+                <p>Modern Canvas-based panels with curved borders, smooth animations, and four premium themes: Light, Dark, Solarized, and Neon.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Advanced Analytics</h3>
+                <p>Comprehensive performance analytics including win rate analysis, account behavior tracking, and advanced radar chart displaying trading metrics.</p>
+            </div>
+        </div>
     </section>
 
-    <section class="perfect-for">
-      <h2>Perfect For</h2>
-      <ul>
-        <li>Traders seeking enhanced visual feedback</li>
-        <li>Risk-conscious traders</li>
-        <li>International traders with diverse portfolios</li>
-        <li>Both novice and professional traders</li>
-        <li>Anyone who values smart, customizable trading interfaces</li>
-      </ul>
+    <!-- Modes Section -->
+    <section id="modes" class="modes">
+        <div class="modes-container">
+            <h2 class="section-title">Three Dynamic Operating Modes</h2>
+            <div class="modes-grid">
+                <div class="mode-card">
+                    <div class="mode-title">Scout Mode</div>
+                    <div class="mode-subtitle">Calculation Mode</div>
+                    <p>Pre-trade analysis with movable price lines, visual SL/TP rectangles, and instant position sizing for optimal trade planning.</p>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-title">SandBox Mode</div>
+                    <div class="mode-subtitle">Free Mode</div>
+                    <p>Backtesting environment with fixed visual elements for historical strategy testing and performance validation.</p>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-title">Command Mode</div>
+                    <div class="mode-subtitle">Live Trading Mode</div>
+                    <p>Active position monitoring with automatic visual updates, performance tracking, and real-time trade management.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section class="conclusion">
-      <p>
-        RiskCopilot EA serves as your intelligent copilot – providing essential calculations, smart spread filtering, and visual guidance while keeping you in complete control of all trading decisions.
-      </p>
-      <p>
-        Whether you're trading EUR/USD with a EUR account, Gold with a GBP account, or Bitcoin with a USD account, RiskCopilot EA delivers precise calculations and intelligent risk management across all market conditions.
-      </p>
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <h2 class="section-title">Trusted by Traders Worldwide</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <div class="stat-label">Supported Instruments</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <div class="stat-label">Major Currencies</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <div class="stat-label">Premium Themes</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <div class="stat-label">Trading Modes</div>
+                </div>
+            </div>
+        </div>
     </section>
-  </main>
 
-  <footer>
-    <p>© 2025 RiskCopilot EA – Built for Traders, by Traders.</p>
-  </footer>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">Support</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <p>&copy; 2025 RiskCopilot EA. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Create animated particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize particles on load
+        window.addEventListener('load', createParticles);
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(15, 15, 35, 0.98)';
+            } else {
+                header.style.background = 'rgba(15, 15, 35, 0.95)';
+            }
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe feature cards and mode cards
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.feature-card, .mode-card, .stat-item').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 </html>
